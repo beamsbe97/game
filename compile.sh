@@ -1,0 +1,1 @@
+g++ -g src/*.cpp -IC:/msys64/mingw64/include -IC:/Users/nguye/Desktop/zelda/include -LC:/msys64/mingw64/lib -lmingw32 -l:libSDL2main.a -lSDL2 -lSDL2_image -o bin/main.exe -LC:/msys64/mingw64/lib -l:libSDL2main.a -lSDL2 -o bin/main.exe
