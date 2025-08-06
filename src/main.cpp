@@ -14,6 +14,16 @@
 using namespace std;
 
 int main(int argc, char* argv[]){
+    std::cout << "C++ version: " << __cplusplus << std::endl;
+
+    // Optional: print as text
+    if (__cplusplus == 199711L) std::cout << "C++98 or C++03\n";
+    else if (__cplusplus == 201103L) std::cout << "C++11\n";
+    else if (__cplusplus == 201402L) std::cout << "C++14\n";
+    else if (__cplusplus == 201703L) std::cout << "C++17\n";
+    else if (__cplusplus == 202002L) std::cout << "C++20\n";
+    else if (__cplusplus > 202002L) std::cout << "C++23 or later\n";
+
     
      if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << "\n";

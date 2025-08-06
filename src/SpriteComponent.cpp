@@ -44,24 +44,22 @@ SpriteComponent::SpriteComponent(RenderWindow* window, string filePath)
     }
 }
 
-void SpriteComponent::update(Player* player){
-    
+void SpriteComponent::update(Player* player){   
     float spriteSizeScaling = 1.5;
     currentFrameIdx = int(SDL_GetTicks()/delayBetweenFrames)%this->animationFrames;
 
-    if(actionAnimationOngoing){
-        std::cout<<currentFrameIdx<<", ";
-        
+    if(actionAnimationOngoing){    
         if((startingFrameIdx==0 && currentFrameIdx==animationFrames-1)
         ||(currentFrameIdx== startingFrameIdx-1)){
             actionAnimationOngoing = false; //signal end of attack animation
             std::cout<<"ATTACK ENDED at frame "<<currentFrameIdx<<"/"<<animationFrames-1<<endl;
         }
-        currentFrameIdx+=int(SDL_GetTicks()/delayBetweenFrames)%this->animationFrames;
-    
+        currentFrameIdx = int((SDL_GetTicks()-animationStartTime)/delayBetweenFrames)%this->animationFrames;
+
     }else{ //start animation
         if(player->getAction()=="ATTACK 1" || player->getAction()=="ATTACK 2"){
             currentFrameIdx=0;
+            animationStartTime = SDL_GetTicks();
             actionAnimationOngoing = true;
             startingFrameIdx = currentFrameIdx;
             std::cout<<"ATTACK STARTED at frame "<<currentFrameIdx<<"/"<<animationFrames-1<<endl;
