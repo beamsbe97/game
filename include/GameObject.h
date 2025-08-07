@@ -26,7 +26,7 @@ class GameObject{
         float yPos;
         string direction;     
         const char* filePath;
-        Polygon* collider;
+        Geometry* collider;
         SpriteComponent* sprite;
         double prevDt=0.0;
            

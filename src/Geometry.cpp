@@ -1,16 +1,19 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "GameObject.h"
 #include <memory>
 #include <algorithm>
+#include "Geometry.h"
+#include "GameObject.h"
 
 using namespace std;
 
-Polygon::Polygon(vector<vector<float>> vertices){
-    this->vertices = vertices;
-    this->getEdges();
-    this->getEdgeVecs();
+Polygon::Polygon(vector<vector<float>> vertices)
+:Geometry(vertices[0][0], vertices[0][1]){
+    vertices = vertices;
+    getEdges();
+    getEdgeVecs();
+    calcAABB_boundaries();
 
 }
 void Polygon::getEdges(){
@@ -28,12 +31,46 @@ void Polygon::getEdgeVecs(){
     }
 }
 
-void Polygon::what(){
-    cout<<this->edges.size()<<"\n";
+bool Polygon::collisionCheck(const Geometry* otherObject) const override{
+    return aabbCollision(otherObject);
+
 }
 
+bool Polygon::aabbCollision(const Geometry* otherObject) const {
+    if  (aabbBoundaries["left"] <= otherObject->aabbBoundaries["right"])
+        &&((aabbBoundaries["top"] >= otherObject->aabbBoundaries["bottom"])
+            ||(aabbBoundaries["bottom"] <= otherObject->aabbBoundaries["top"])){
+                return true;
+            }
+    
+    if  (aabbBoundaries["right"] >= otherObject->aabbBoundaries["left"])
+        &&((aabbBoundaries["top"] >= otherObject->aabbBoundaries["bottom"])
+            ||(aabbBoundaries["bottom"] <= otherObject->aabbBoundaries["top"])){
+                return true;
+            }
+    
+    return false;
 
-bool Polygon::collisionCheck(Polygon& otherObject){
+}
+
+vector<map<string,float>> Polygon::calcAABB_boundaries(){
+    float maxX = std::numeric_limits<float>::lowest();
+    float maxY = std::numeric_limits<float>::lowest();
+    float minX = -std::numeric_limits<float>::lowest();
+    float minY = -std::numeric_limits<float>::lowest();
+
+    for(const auto& edge:edges){
+        for(const auto& point:edge){
+            if(point[0]>maxX) maxX = point[0];
+            if(point[1]>maxY) maxY = point[1];
+            if(point[0]<minX) minX = point[0];
+            if(point[1]<minY) minY = point[1];
+        }
+    }
+    aabbBoundaries = {{"left",minX}, {"right",maxX}, {"top",minY}, {"bottom",maxY}};
+}
+
+bool Polygon::satCollision(const Geometry* otherObject) const{
     for(int i=0; i<edgeVecs.size(); i++){ // loop through every edge on polygon A
 
         //Get Normal vector of the edge
@@ -74,4 +111,17 @@ bool Polygon::collisionCheck(Polygon& otherObject){
 
     } 
     return false;
+}
+
+Circle::Circle(float xCentre, float yCentre, float radius)
+:Geometry(xCentre, yCentre), radius(radius){
+    calcAABB_boundaries();
+}
+
+vector<map<string,float>> Circle::calcAABB_boundaries(){
+    aabbBoundaries={{"left", xOrigin-radius}, 
+                    {"right", xOrigin+radius}, 
+                    {"top", yOrigin-radius}, 
+                    {"bottom", yOrigin+radius}};
+
 }

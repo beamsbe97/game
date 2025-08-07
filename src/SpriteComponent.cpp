@@ -52,7 +52,6 @@ void SpriteComponent::update(Player* player){
         if((startingFrameIdx==0 && currentFrameIdx==animationFrames-1)
         ||(currentFrameIdx== startingFrameIdx-1)){
             actionAnimationOngoing = false; //signal end of attack animation
-            std::cout<<"ATTACK ENDED at frame "<<currentFrameIdx<<"/"<<animationFrames-1<<endl;
         }
         currentFrameIdx = int((SDL_GetTicks()-animationStartTime)/delayBetweenFrames)%this->animationFrames;
 
@@ -62,7 +61,6 @@ void SpriteComponent::update(Player* player){
             animationStartTime = SDL_GetTicks();
             actionAnimationOngoing = true;
             startingFrameIdx = currentFrameIdx;
-            std::cout<<"ATTACK STARTED at frame "<<currentFrameIdx<<"/"<<animationFrames-1<<endl;
         }
 
     }

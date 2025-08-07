@@ -50,11 +50,6 @@ void Player::handleTransformInput(const Uint8* kbState, double deltaTime){
     // prevDt = smoothedDt;
     int notifierFrame;
 
-    // int numKeys = 0;
-    // SDL_GetKeyboardState(&numKeys);
-    // bool nothingPressed = true;
-
-
     if(sprite->getActionAnimationOngoing()){
         return;
     }
@@ -64,14 +59,12 @@ void Player::handleTransformInput(const Uint8* kbState, double deltaTime){
         return;
     }
 
-
     if(kbState[SDL_SCANCODE_LSHIFT]||kbState[SDL_SCANCODE_SPACE]){
         if((kbState[SDL_SCANCODE_SPACE])) action = "ATTACK 1";
         else action = "ATTACK 2";
         return;
     }
   
-
     else if (kbState[SDL_SCANCODE_W]||kbState[SDL_SCANCODE_UP]){     
         direction = "up";
     }
@@ -94,7 +87,6 @@ void Player::handleTransformInput(const Uint8* kbState, double deltaTime){
 
 
 void ActiveObject::_move(double& deltaTime){
-
     velocity = 40;
     float dtScale = 0.01;
 
@@ -129,8 +121,10 @@ void ActiveObject::_move(double& deltaTime){
     else if (direction=="right"){
         if (((xPos-velocity*deltaTime)+sprite->getDestRect()->w) > window->getWidth()){
             xPos = window->getWidth() - sprite->getDestRect()->w;
+        }else{
+            xPos+= velocity*deltaTime;
         }
-        xPos+= velocity*deltaTime;
+        
     }
     
 }

@@ -13,6 +13,10 @@ RenderWindow::RenderWindow(const char * title, int width, int height)
     }
 
     renderer = SDL_CreateRenderer(window,  -1, SDL_RENDERER_ACCELERATED);
+    if(renderer==NULL){
+        std::cout << "Failed to init renderer. Error:" << SDL_GetError() << std::endl;
+    }
+
 }
 
 
